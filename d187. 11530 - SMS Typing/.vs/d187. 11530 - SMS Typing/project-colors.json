@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "b688ab80-8509-4a0c-b5e6-51a0c43b3121": {
+      "ProjectGuid": "b688ab80-8509-4a0c-b5e6-51a0c43b3121",
+      "DisplayName": "d187. 11530 - SMS Typing",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "其他檔案",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 1
+}
