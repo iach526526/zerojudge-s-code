@@ -43,7 +43,7 @@ struct mode//眾數
 	int how_many;
 	int value;
 };
-
+void processing(int*,int);
 int main() {
 
 	int* in_arr = NULL;
@@ -53,37 +53,47 @@ int main() {
 	while (cin >> this_num) {
 		in_arr =(int *) realloc(in_arr, (max_index +1)* sizeof(int));//多添加一個空間在原始陣列後方
 		in_arr[max_index] = this_num;
-		
 		char c;
 		c = getchar();
-		if (c == '\n')
-
+		if (c != ' ')
+		{
+			processing(in_arr, max_index);
+			max_index = 0;//初始化，跑下一筆測資
+			in_arr = NULL;
+			in_arr = (int*)malloc(1 * sizeof(int));//先配置一個整數空間當初始，後面要用再加
 			continue;
+		}
+			
 		max_index++;
 	}
+
+}
+
+void processing(int* in_arr,int max_index)
+{
 	//若要遍歷，max_index從0開始，若有n個數字數入(首項叫第一個數字)，則max_index=n-1
 	quickSort(in_arr, 0, max_index);
 	//輸出測試
-	for (int j = 0; j <= max_index; j++)
+	/*for (int j = 0; j <= max_index; j++)
 	{
 		if (j == 0)
 		{
 			cout << in_arr[j];
 			continue;
 		}
-			
-		cout <<" " << in_arr[j];
+
+		cout << " " << in_arr[j];
 	}
-	cout << endl; 
+	cout << endl;*/
 	//輸出測試
-	int *now_index = in_arr;//遍歷指標*now_index在指向in_arr的起始
-	
-	struct mode this_mode; this_mode.how_many = 0;this_mode.value = *now_index;
+	int* now_index = in_arr;//遍歷指標*now_index在指向in_arr的起始
+
+	struct mode this_mode; this_mode.how_many = 0; this_mode.value = *now_index;
 	int have_been_ran = 0;//標註外層while是不是第一次跑
-	int j=1;//j:這次判斷的數組出現次數
+	int j = 1;//j:這次判斷的數組出現次數
 	for (int i = 0; i < max_index; i++)//末項不用和下一項比較，i跑到max_index-1就好
 	{
-		while (*(now_index +j-1) == *(now_index +j))//從自己現在這項和後面一項比較有沒有相同，若有則J++
+		while (*(now_index + j - 1) == *(now_index + j))//從自己現在這項和後面一項比較有沒有相同，若有則J++
 		{
 			j++;
 		}
@@ -96,30 +106,30 @@ int main() {
 		i = i + j;
 		j = 1;
 	}
-	cout << endl << "value:" << this_mode.value;
-	cout << endl << "turn:" << this_mode.how_many;
+	/*cout << endl << "value:" << this_mode.value;
+	cout << endl << "turn:" << this_mode.how_many;*/
 
 	//this_mode.how_many和this_mode.value分別儲存出現次數最多的數字和值了
 	//再來判斷眾數出現多組次數一樣的狀況(都要輸出)
-	 now_index = in_arr;//遍歷指標*now_index指向in_arr的起始
-	 bool find_friend = false;//有沒有出現多組眾數憑據
+	now_index = in_arr;//遍歷指標*now_index指向in_arr的起始
+	bool find_friend = false;//有沒有出現多組眾數憑據
 	for (int count_index = 0; count_index <= max_index;)//讓迴圈結尾那邊加
 	{
-		int same=1;
-		while (now_index[same-1] == now_index[same])
+		int same = 1;
+		while (now_index[same - 1] == now_index[same])
 		{
 			same++;
 		}
 		if (same == this_mode.how_many)//又找到一個與出現次數最多的數字一樣的次數
 		{
-			
+
 			if (!find_friend)//前面若沒有輸出過，第一個不用空白
 			{
 				cout << now_index[0];
 			}
 			else
 			{
-				cout <<" " << now_index[0];
+				cout << " " << now_index[0];
 			}
 			find_friend = true;
 		}
@@ -131,5 +141,6 @@ int main() {
 	{
 		cout << this_mode.value;
 	}
+	cout << endl;
 	free(in_arr);//歸還動態空間
 }
