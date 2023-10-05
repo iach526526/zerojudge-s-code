@@ -31,7 +31,7 @@ for i in range(MAX_bit):#產生全1的arr，找某一最小基數的進制等於
 #找到幸運基數的flag
 FOUND=0
 
-for count in range(MAX_bit):#外層for跑
+for count in range(MAX_bit):#外層for跑到1最多的數量(SEARCH-1)
     left=2;right=SEARCH-1;mid=-1#界定左界、右界;宣告中間項變數
     while(left<=right):
         mid=(left+right)//2
