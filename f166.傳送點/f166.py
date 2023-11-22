@@ -3,42 +3,43 @@ N,TARGET,L,R=map(int,input().split())
 local=list(map(int,input().split()))
 # ^ 每一格地上傳送點座標
 
-def go(now):
+def go(now):#查表完成傳送動作
     global local
     if now<0 or now>=N:
         return -1
     else:
         return local[now]
 def add_son(ROOT):
-    global same_layerNode,L,R
-    goL=go(ROOT-L);goR=go(ROOT+R)
-    if goL!=-1:
-        same_layerNode.append(goL)
-    if goR!=-1:
-        same_layerNode.append(goR)
-Tstep=0#Totalstep:操作次數記數，輸出就要它
-same_layerNode=[]
-add_son(0)
+    global next_layertemp,L,R,visted
+    goL=go(ROOT-L);goR=go(ROOT+R)#接下來的位置算法:左/右移動，踩到傳送點移動過去
+    #走出界外的節點不會加入待造訪清單走下去
+    if goL!=-1 and not(goL in visted):
+        next_layertemp.add(goL)
+        visted.add(goL)
+    if goR!=-1 and not(goR in visted):
+        next_layertemp.add(goR)
+        visted.add(goR)
+Tstep=1#Totalstep:操作次數記數，輸出就要它
+now_layerNode=[]
+next_layertemp=set()
 visted=set()
+add_son(0)
 while(1):
-    
-    
-    # print('List:',same_layerNode,'STEP',Tstep)
-    
-    for layer in range(2**Tstep):
-        print('List:',same_layerNode,'STEP',Tstep)
-        
-        if same_layerNode==[]:
-            print(-1)
+    # print("-------------")
+    # print('List:',now_layerNode,'STEP',Tstep)
+    # print('n:',next_layertemp)
+    if len(next_layertemp)==0:#沒有子節點了，結束程式
+        print(-1)
+        exit()
+    # print('n:',next_layertemp)
+    now_layerNode=list(next_layertemp.copy())
+    next_layertemp.clear()
+    # print('List:',now_layerNode,'STEP',Tstep)
+    while(now_layerNode!=[]):
+        if now_layerNode[0]==TARGET:
+            print(Tstep)
             exit()
-        if same_layerNode[0]==TARGET:
-            print(Tstep+1)
-            exit()
-            
-        if layer%2==0 and not(same_layerNode[0] in visted):
-            add_son(same_layerNode[0])#從左到右append子樹
-            visted.add(same_layerNode[0])#放入已造訪清單，之後若有其他節點和清單內重複可以不用往下走，就是個死路
-            same_layerNode.pop(0)
-        else:
-            same_layerNode.pop(0)
+        add_son(now_layerNode[0])#append子樹，放在next_layertemp占存，等等會丟給now_layer執行
+        now_layerNode.pop(0)
+    
     Tstep+=1
