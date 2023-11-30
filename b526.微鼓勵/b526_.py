@@ -1,3 +1,4 @@
+import heapq
 do_range=[]
 def rmRange(lst,index,count):#給定索引，向右刪除count個元素
     # PRINT_STATE("-")
@@ -7,12 +8,15 @@ def rmRange(lst,index,count):#給定索引，向右刪除count個元素
 PCOUNT,M=[int(input()) for _ in range(2)]#人數,微鼓勵次數
 for i in range(M):
     do_range.append(tuple(map(int,input().split(' '))))
+
+heapq.heapify(do_range)#lsit轉heapq
+# exit()
 index_ptr=0
 do_range.sort()#排序微鼓勵區間元組
-LenM=len(do_range)
+LenM=M
 cte=1
 def PRINT_STATE(sp='##'):
-    return
+    # return
     global do_range,index_ptr,LenM
     print(sp,do_range,len(do_range),LenM,index_ptr)
 while(1):
