@@ -7,25 +7,23 @@ for i in range(M):
 heapq.heapify(do_range)#lsit轉heapq
 
 sit=0
-def PRINT_STATE(sp='##'):
-    # return
-    global do_rang,sit
-    print(sp,do_range,len(do_range),sit)
+LENrange=M
 while(1):
-    LENrange=len(do_range)
-    # PRINT_STATE("+")
     if LENrange==1:
-        # PRINT_STATE('@')
         last=heapq.heappop(do_range)
+        LENrange-=1
         sit+=last[1]-last[0]+1
         break
     elif LENrange>1:
         left=heapq.heappop(do_range)
         right=heapq.heappop(do_range)#把最小的兩項pop出來比較消除。最後再把化簡後的範圍放回來，做到不能再消除
+        LENrange-=2
     else:
         break
     #index 0:起點
     #index 1:終點
+    
+
     L_start=left[0];R_start=right[0]
     L_end=left[1];R_end=right[1]
     #先檢查最左邊範圍是不是只有一點
@@ -33,7 +31,9 @@ while(1):
         #左cuple內的兩個值相同，對單個人做微鼓勵
         sit+=1
         heapq.heappush(do_range,right)#right沒做到，放回去
+        LENrange+=1
         continue
+    
     if L_start==R_start:#起點相同
         if L_end==R_end:#起點和終點都相同，不動作
             continue
@@ -43,6 +43,7 @@ while(1):
             -----
             '''
             heapq.heappush(do_range,(L_end+1,R_end))#留多出來那段
+            LENrange+=1
             # LenM-=1
     elif (L_start<R_start and L_end>R_end): #L覆蓋的範圍比R大，用L-R分成兩塊
         '''
@@ -52,12 +53,14 @@ while(1):
 #插入被切開不重複的兩段
         heapq.heappush(do_range, (L_start,R_start-1))
         heapq.heappush(do_range, (R_end+1,L_end))
+        LENrange+=2
     elif (L_start<R_start and L_end==R_end):#不同起點，相同終點
         '''
             ----
               --
         '''
         heapq.heappush(do_range, (L_start,R_start-1))
+        LENrange+=1
         # LenM-=1
     elif (L_start<R_start and L_end<R_end and R_start<L_end):
         '''
@@ -66,9 +69,19 @@ while(1):
         '''
         heapq.heappush(do_range, (L_start,R_start-1))
         heapq.heappush(do_range, (L_end+1,R_end))
+        LENrange+=2
+    elif(L_start<R_start and L_end==R_start):
+        '''
+            ---
+               ---
+        '''
+        heapq.heappush(do_range, (L_start,R_start-1))
+        heapq.heappush(do_range, (R_start+1,R_end))
+        LENrange+=2
     else:
         #左右無法消除，把left加進去坐著的人數，right放回去待辦和第三項比較
         sit+=left[1]-left[0]+1
         heapq.heappush(do_range,(R_start,R_end))
+        LENrange+=1
 #出whille
 print(PCOUNT-sit)
