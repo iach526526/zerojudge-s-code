@@ -7,13 +7,13 @@ for i in range(M):
 heapq.heapify(do_range)#lsit轉heapq
 
 sit=0
-# def PRINT_STATE(sp='##'):
-#     return
-#     global do_rang,sit
-#     print(sp,do_range,len(do_range),sit)
+def PRINT_STATE(sp='##'):
+    # return
+    global do_rang,sit
+    print(sp,do_range,len(do_range),sit)
 while(1):
-    # PRINT_STATE("+")
     LENrange=len(do_range)
+    # PRINT_STATE("+")
     if LENrange==1:
         # PRINT_STATE('@')
         last=heapq.heappop(do_range)
@@ -21,7 +21,7 @@ while(1):
         break
     elif LENrange>1:
         left=heapq.heappop(do_range)
-        right=heapq.heappop(do_range)#相鄰兩項出來比較
+        right=heapq.heappop(do_range)#把最小的兩項pop出來比較消除。最後再把化簡後的範圍放回來，做到不能再消除
     else:
         break
     #index 0:起點
@@ -29,20 +29,14 @@ while(1):
     L_start=left[0];R_start=right[0]
     L_end=left[1];R_end=right[1]
     #先檢查最左邊範圍是不是只有一點
-    if L_start==L_end:
+    if L_start==L_end and L_start<R_start:
         #左cuple內的兩個值相同，對單個人做微鼓勵
-        # PRINT_STATE('&')
-        sit+=+1
+        sit+=1
         heapq.heappush(do_range,right)#right沒做到，放回去
         continue
-    elif R_start==R_end:
-        sit+=+1
-        heapq.heappush(do_range,left)#left沒做到，放回去
-        continue
-
     if L_start==R_start:#起點相同
-        if L_end==R_end:#起點和終點都相同
-            pass
+        if L_end==R_end:#起點和終點都相同，不動作
+            continue
         elif L_end<R_end:
             '''left範圍較短一點
             ---
@@ -50,9 +44,7 @@ while(1):
             '''
             heapq.heappush(do_range,(L_end+1,R_end))#留多出來那段
             # LenM-=1
-        # else:
-        #     PRINT_STATE("去底霸格")
-    elif (L_start<R_start and L_end>R_end and L_end>R_end): #L覆蓋的範圍比R大，用L-R分成兩塊
+    elif (L_start<R_start and L_end>R_end): #L覆蓋的範圍比R大，用L-R分成兩塊
         '''
             ------
               --
@@ -78,7 +70,5 @@ while(1):
         #左右無法消除，把left加進去坐著的人數，right放回去待辦和第三項比較
         sit+=left[1]-left[0]+1
         heapq.heappush(do_range,(R_start,R_end))
-    # PRINT_STATE(")(")
 #出whille
-# PRINT_STATE("@")
 print(PCOUNT-sit)
