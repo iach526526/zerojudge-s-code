@@ -1,59 +1,60 @@
-
-N,M=0,0
-#遞迴解BFS
-def bfs(arr,flag,nowT,x=0,y=0):
-    global N,M
-    if(arr[y][x]=='0'):
-        return
-    arr[y][x]=str(nowT)
-    #判斷下、右、左
-    if y+1<N and arr[y+1][x]=='1':
-        bfs(arr,flag,nowT+1,x,y+1)
-    if x+1<M and arr[y][x+1]=='1':
-        bfs(arr,flag,nowT+1,x+1,y)
-    if x-1>=0:
-        if arr[y][x-1]=='1':
-            bfs(arr,flag,nowT+1,x-1,y)
-    if flag==1 and y-1>0:
-        if arr[y-1][x]=='1':
-            bfs(arr,flag,nowT+1,x,y-1)
-    if flag==1 and y-1>0:
-        if arr[y-1][x]=='1':
-            bfs(arr,flag,nowT+1,x,y-1)
-    return
-        
-        
-
-
+#stack解BFS
+def FINDFIRST(arr,col):
+    for i in range(col):
+        if(arr[0][i]=='1'):
+            return i
 case=0
-# while(1):
-#     try:
-case+=1
-flag=int(input())
-N,M=map(int,input().split(' '))
-'''
-M
-|‾ ‾ |
-N|    |
-|    |
-'''
-space=[]#放置水管的空間(二維)
-for i in range(N):
-    space.append(input().split(' '))
-for col in range(M):
-    if space[0][col]=='1':
-        # space[0][col]=TIME
-        bfs(space,flag,1,col,0)
-print(f'Case {case}:')
-for row in space:
-    count=0
-    for col in row:
-        if count==0:
-            print(int(col),end='')
-            count+=1
-        else:
-            print(' ',int(col),end='')
-    print()
-    # except:
-    #     print("error")
-    #     break
+while(1):
+    try:
+        case+=1
+        flag=int(input())
+        N,M=map(int,input().split(' '))
+        '''
+        M
+        |‾ ‾ |
+       N|    |
+        |    |
+        '''
+        space=[]#放置水管的空間(二維)
+        for i in range(N):
+            space.append(input().split(' '))
+        WORK=[]#待處理堆疊
+        #※  因為開始倒的地方只有 1 個且只在第一列倒，先找出那個座標
+        startXP=FINDFIRST(space,M)
+        space[0][startXP]=1
+        WORK.append((startXP,0,2))#插入第一個
+        # TIME=1
+        while(WORK!=[]):
+            nowX,nowY,TIME=WORK.pop(0)
+            # print(nowX,nowY,TIME)
+            if (flag==1 and nowY-1>=0 and space[nowY-1][nowX]=='1'):#option:往上走
+                WORK.append((nowX,nowY-1,TIME+1))
+                space[nowY-1][nowX]=TIME
+            if (nowY+1<N and space[nowY+1][nowX]=='1'):#往下走
+                WORK.append((nowX,nowY+1,TIME+1))
+                space[nowY+1][nowX]=TIME
+            if (nowX-1>=0 and space[nowY][nowX-1]=='1'):#往左走
+                WORK.append((nowX-1,nowY,TIME+1))
+                space[nowY][nowX-1]=TIME
+            if (nowX+1<M and space[nowY][nowX+1]=='1'):#往右走
+                WORK.append((nowX+1,nowY,TIME+1))
+                space[nowY][nowX+1]=TIME
+            # TIME+=1
+                
+
+        print(f'Case {case}:')
+        for row in space:
+            count=M
+            for col in row:
+                if col=="1":#水不能往上流或沒有連通的水管原本的位置要換成0
+                    output=0
+                else:
+                    output=col
+                if count==0:
+                    print(int(output),end='')
+                    count-=1
+                else:
+                    print(int(output),end=' ')
+            print()
+    except:
+        break
